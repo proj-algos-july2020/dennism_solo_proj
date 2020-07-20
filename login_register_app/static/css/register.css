@@ -1,0 +1,61 @@
+body {
+    background-image: url('../img/background-photo.jpg');
+    background-repeat: no-repeat;
+    background-image: center;
+    background-size: cover;
+    overflow: hidden;
+    height: 100%;
+}
+
+body::before {
+    background-color: rgba(144, 242, 249, 0.4);
+    content: '';
+    display: block;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}
+
+.container {
+    width: 70%;
+    background-color: rgba(168, 163, 163, 0.8);
+    margin-top: 50px;
+    padding: 50px 0;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+h4, button {
+    display: inline-block;
+    text-align: center;
+}
+
+.alert {
+    margin: 0;
+    padding: 5px;
+    font-size: 0.8em;
+}
+
+.col-4:first-of-type {
+    margin-right: 50px;
+    padding: 0;
+}
+
+.col-4:last-of-type {
+    border-left: 1px solid black;
+    padding-left: 50px;
+    padding-right: 0;
+}
+
+.col-4 .display-4 {
+    font-weight: 350;
+    margin-bottom: 20px;
+}
+
+.navbar .navbar-brand {
+    font-size: 1.6rem;
+}
+
+label {
+    margin-bottom: 0;
+}
