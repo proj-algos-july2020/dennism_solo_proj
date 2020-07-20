@@ -19,7 +19,7 @@ def register(request):
         return redirect('/')
 
 def index(request):
-    return render(request, 'login_page.html')
+    return render(request, 'login_register.html')
 
 def login(request):
     errors = User.objects.login_validator(request.POST)
