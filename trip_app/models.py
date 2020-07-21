@@ -2,8 +2,6 @@ from __future__ import unicode_literals
 from django.db import models
 from datetime import datetime
 from login_register_app.models import User
-import re
-import bcrypt
 
 class TripManager(models.Manager):
     def trip_validator(self,postData):
@@ -33,6 +31,27 @@ class TripManager(models.Manager):
             errors['amount'] = 'Amount of expense is required.'
         return errors
 
+    def itinerary_validator(self,postData):
+        errors = {}
+        if postData['date'] == '':
+            errors['date'] = 'Activity date is required.'
+
+        if postData['start_time'] == '':
+            errors['start_time'] = 'Start time is required.'
+
+        if postData['end_time'] == '':
+            errors['end_time'] = 'End time is required.'
+
+        if postData['start_time'] != '' and postData['end_time'] != '':
+            start = datetime.time(postData['start_time'])
+            end = datetime.time(postData['end_time'])
+            if start > end:
+                errors['start_time'] = 'Time travel is not allowed!'
+        
+        if postData['activity'] == '':
+            errors['activity'] = 'Activity description is required.'
+        return errors
+
 class Trip(models.Model):
     city = models.CharField(max_length=255)
     country = models.CharField(max_length=255)
@@ -51,6 +70,25 @@ class Expense(models.Model):
     paid_by = models.ForeignKey(User, related_name="expenses_paid", on_delete=models.CASCADE)
     notes = models.TextField()
     trip = models.ForeignKey(Trip, related_name="all_expenses", on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = TripManager()
+
+class Itinerary(models.Model):
+    date = models.DateField()
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    activity = models.CharField(max_length=255)
+    address = models.CharField(max_length=255, blank=True)
+    notes = models.TextField()
+    trip = models.ForeignKey(Trip, related_name="all_activities", on_delete=models.CASCADE)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    objects = TripManager()
+
+class PhotoAlbum(models.Model):
+    photo = models.ImageField()
+    trip = models.ForeignKey(Trip, related_name="all_photos", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
