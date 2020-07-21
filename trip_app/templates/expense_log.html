@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login and Registration</title>
+    <title>Trippr: Trip's Expense Log</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
@@ -20,7 +20,7 @@
                     <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Start a New Trip</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Trips</a>
+                    <a class="nav-link active" href="#" tabindex="-1" aria-disabled="true">Trips</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Friends</a>
@@ -32,58 +32,50 @@
             <button class="btn btn-danger my-2 my-sm-0" type="submit">Log Out</button>
         </form>
     </nav>
+
     <div class="container">
-        <h4 class="display-4">User Profile</h4>
-        <div class="row justify-content-center">
-            <div class="col-2">
-                <img src="../../login_register_app/static/img/profile-placeholder.png" alt="Profile Picture" class="prof-pic">
-            </div>
-            <div class="col-10">
-                <div class="form-group">
-                    <p>Name</p>
-                    <h4>{{ curr_user.first_name }}, {{ curr_user.last_name }}</h4>
-                </div>
-                <div class="form-group">
-                    <p>Email</p>
-                    <h5>{{ curr_user.email }}</h5>
-                </div>
-                <div class="form-group">
-                    <p>Date of Birth</p>
-                    <h5>{{ curr_user.birthday|date:'Y-m-d' }}</h5>
-                </div>
-            </div>
-        </div>
         <div class="row justify-content-center">
             <div class="col-12">
-                <h5>Upcoming Trips</h5>
-                <a href="">All trips >></a>
+                <a href=""><< Back to Trip</a>
+                <h4 class="display-4">{{ curr_trip.city }}, {{ curr_trip.country }}</h4>
+                <p>{{ curr_trip.start_date|date:'Y-m-d' }}</p>
+                <h5>Expense Log</h5>
                 <table class="table">
                     <thead class="thead-light">
-                         <tr>
-                            <th>Destination</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Created By</th>
-                            <th>Participants</th>
-                       </tr>
-                   </thead>
-                   <tbody>
-                       
-                   </tbody>
-               </table>
-               <form action="" method="GET">
-                   <button type="submit" class="btn btn-outline-success">Create a New Trip</button>
-               </form>
-                <h5>Friends List</h5>
-                <a href="">All friends >></a>
-                <table class="table friend-list">
-                    <tr>
-                        <td>
-                            <img src="../../login_register_app/static/img/profile-placeholder.png" alt="Profile Picture" class="prof-pic-friend">
-                            <p>Jordan</p>
-                        </td>
-                    </tr>
+                        <tr>
+                            <th>Amount</th>
+                            <th>Paid By</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
                 </table>
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <h5>Add an Expense</h5>
+                        <div class="form-group">
+                            <label for="amount">Amount</label>
+                            <input type="number" class="form-control" name="amount" id="amount">
+                        </div>
+                        <div class="form-group">
+                            <label for="paid_by">Paid By</label>
+                            <select id="paid_by" name="paid_by" size="1" class="form-control">
+                                <option value="{{ user.id }}">Volvo</option>
+                                <option value="saab">Saab</option>
+                                <option value="fiat">Fiat</option>
+                                <option value="audi">Audi</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="notes">Notes</label>
+                            <textarea name="notes" id="notes" rows="10" class="form-control expense-notes" placeholder="Enter your notes here..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-outline-success">Add Expense</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

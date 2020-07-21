@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login and Registration</title>
+    <title>Trippr: Friends List</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
@@ -23,7 +23,7 @@
                     <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Trips</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Friends</a>
+                    <a class="nav-link active" href="#" tabindex="-1" aria-disabled="true">Friends</a>
                 </li>
             </ul>
         </div>
@@ -33,57 +33,35 @@
         </form>
     </nav>
     <div class="container">
-        <h4 class="display-4">User Profile</h4>
-        <div class="row justify-content-center">
-            <div class="col-2">
-                <img src="../../login_register_app/static/img/profile-placeholder.png" alt="Profile Picture" class="prof-pic">
+        <h4 class="display-4">Friends List</h4>
+        <hr>
+        <div class="row">
+            <div class="col-2 friend">
+                <img src="" alt="Profile Picture">
+                <p>name</p>
             </div>
-            <div class="col-10">
-                <div class="form-group">
-                    <p>Name</p>
-                    <h4>{{ curr_user.first_name }}, {{ curr_user.last_name }}</h4>
-                </div>
-                <div class="form-group">
-                    <p>Email</p>
-                    <h5>{{ curr_user.email }}</h5>
-                </div>
-                <div class="form-group">
-                    <p>Date of Birth</p>
-                    <h5>{{ curr_user.birthday|date:'Y-m-d' }}</h5>
-                </div>
+            <div class="col-2 friend">
+                <img src="" alt="Profile Picture">
+                <p>name</p>
             </div>
         </div>
-        <div class="row justify-content-center">
-            <div class="col-12">
-                <h5>Upcoming Trips</h5>
-                <a href="">All trips >></a>
-                <table class="table">
-                    <thead class="thead-light">
-                         <tr>
-                            <th>Destination</th>
-                            <th>Start Date</th>
-                            <th>End Date</th>
-                            <th>Created By</th>
-                            <th>Participants</th>
-                       </tr>
-                   </thead>
-                   <tbody>
-                       
-                   </tbody>
-               </table>
-               <form action="" method="GET">
-                   <button type="submit" class="btn btn-outline-success">Create a New Trip</button>
-               </form>
-                <h5>Friends List</h5>
-                <a href="">All friends >></a>
-                <table class="table friend-list">
-                    <tr>
-                        <td>
-                            <img src="../../login_register_app/static/img/profile-placeholder.png" alt="Profile Picture" class="prof-pic-friend">
-                            <p>Jordan</p>
-                        </td>
-                    </tr>
-                </table>
+        <h4 class="display-4">Add Friend</h4>
+        <hr>
+        <div class="row">
+
+            <div class="col-2 friend">
+                <img src="" alt="Profile Picture">
+                <p>name</p>
+                <form action="">
+                    <button class="btn btn-outline-primary">add</button>
+                </form>
+            </div>
+            <div class="col-2 friend">
+                <img src="" alt="Profile Picture">
+                <p>name</p>
+                <form action="">
+                    <button class="btn btn-outline-primary">add</button>
+                </form>
             </div>
         </div>
     </div>

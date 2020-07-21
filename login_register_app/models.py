@@ -73,7 +73,7 @@ class User(models.Model):
     email = models.CharField(max_length=255)
     password = models.CharField(max_length=255)
     friends = models.ManyToManyField('self')
-    prof_pic = models.ImageField(upload_to='profile_image', blank=True)
+    prof_pic = models.ImageField(upload_to='profile_image', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = UserManager()

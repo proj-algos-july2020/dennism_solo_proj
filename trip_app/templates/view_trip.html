@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trippr: View Trip</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
+        <a class="navbar-brand display-4" href="#">Trippr</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Start a New Trip</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="#" tabindex="-1" aria-disabled="true">Trips</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Friends</a>
+                </li>
+            </ul>
+        </div>
+        <form class="form-inline my-2 my-lg-0" method="POST" action="/logout" >
+            <p class="greet">Welcome, Dennis!</p>
+            <button class="btn btn-danger my-2 my-sm-0" type="submit">Log Out</button>
+        </form>
+    </nav>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <h4 class="display-4">Trip Information</h4>
+                <div class="form-group">
+                    <p>Destination</p>
+                    <h4>{{ curr_trip.city }}, {{ curr_trip.country }}</h4>
+                </div>
+                <div class="form-group">
+                    <p>When</p>
+                    <h5>{{ curr_trip.start_date|date:'Y-m-d' }}</h5>
+                </div>
+                <form action="">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-primary">Edit Trip</button>
+                    <button type="submit" name="delete_trip" class="btn btn-outline-danger">Delete Trip</button>
+                </form>
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Trip Participants</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+                <form action="" method="POST">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="participant">Add Participant</label>
+                        <select id="participant" name="participant" size="1" class="form-control">
+                            <option value="{{ user.id }}">Volvo</option>
+                            <option value="saab">Saab</option>
+                            <option value="fiat">Fiat</option>
+                            <option value="audi">Audi</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-outline-primary">Add</button>
+                    <hr>
+                </form>
+                <hr>
+                <h5>Expense Log</h5>
+                <a href="">Edit >></a>
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Amount</th>
+                            <th>Paid By</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-6">
+                <h4 class="display-4">Itinerary</h4>
+                <a href="">Edit >></a>
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Date</th>
+                            <th>Time</th>
+                            <th>Activity</th>
+                            <th>Address</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        
+                    </tbody>
+                </table>
+                <hr>
+                <form action="" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <h5>Upload Photo for the Trip</h5>
+                        <input type="file" class="form-control" name="photo" id="photo">
+                        <a href="">View Photo Album</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</html>
