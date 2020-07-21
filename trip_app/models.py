@@ -56,7 +56,7 @@ class Trip(models.Model):
     city = models.CharField(max_length=255)
     country = models.CharField(max_length=255)
     state = models.CharField(max_length=255,blank=True)
-    destination = models.CharField(max_length=255,blank=True)
+    place = models.CharField(max_length=255,blank=True)
     start_date = models.DateField()
     end_date = models.DateField()
     created_by = models.ForeignKey(User, related_name="trips_created", on_delete=models.CASCADE)
@@ -91,7 +91,3 @@ class PhotoAlbum(models.Model):
     trip = models.ForeignKey(Trip, related_name="all_photos", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-
-
-
-
