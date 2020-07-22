@@ -10,20 +10,20 @@
 </head>
 <body>
     <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
-        <a class="navbar-brand display-4" href="#">Trippr</a>
+        <a class="navbar-brand display-4" href="/dashboard">Trippr</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Start a New Trip</a>
+                    <a class="nav-link" href="/dashboard/trips/new" tabindex="-1" aria-disabled="true">Start a New Trip</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Trips</a>
+                    <a class="nav-link" href="/dashboard/trips" tabindex="-1" aria-disabled="true">Trips</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="#" tabindex="-1" aria-disabled="true">Friends</a>
+                    <a class="nav-link active" href="/dashboard/friends" tabindex="-1" aria-disabled="true">Friends</a>
                 </li>
             </ul>
         </div>
@@ -39,28 +39,37 @@
             <div class="col-2 friend">
                 <img src="" alt="Profile Picture">
                 <p>name</p>
-            </div>
-            <div class="col-2 friend">
-                <img src="" alt="Profile Picture">
-                <p>name</p>
-            </div>
-        </div>
-        <h4 class="display-4">Add Friend</h4>
-        <hr>
-        <div class="row">
-
-            <div class="col-2 friend">
-                <img src="" alt="Profile Picture">
-                <p>name</p>
                 <form action="">
-                    <button class="btn btn-outline-primary">add</button>
+                    <input type="text" value="" id="friend" name="friend" hidden>
+                    <button class="btn btn-outline-danger" type="submit">delete</button>
                 </form>
             </div>
             <div class="col-2 friend">
                 <img src="" alt="Profile Picture">
                 <p>name</p>
                 <form action="">
-                    <button class="btn btn-outline-primary">add</button>
+                    <input type="text" value="" id="friend" name="friend" hidden>
+                    <button class="btn btn-outline-danger" type="submit">delete</button>
+                </form>
+            </div>
+        </div>
+        <h4 class="display-4">Add Friend</h4>
+        <hr>
+        <div class="row">
+            <div class="col-2 friend">
+                <img src="" alt="Profile Picture">
+                <p>name</p>
+                <form action="">
+                    <input type="text" value="" id="friend" name="friend" hidden>
+                    <button class="btn btn-outline-primary" type="submit">add</button>
+                </form>
+            </div>
+            <div class="col-2 friend">
+                <img src="" alt="Profile Picture">
+                <p>name</p>
+                <form action="">
+                    <input type="text" value="" id="friend" name="friend" hidden>
+                    <button class="btn btn-outline-primary" type="submit">add</button>
                 </form>
             </div>
         </div>

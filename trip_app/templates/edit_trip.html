@@ -10,20 +10,20 @@
 </head>
 <body>
     <nav class="navbar navbar-dark bg-dark navbar-expand-lg">
-        <a class="navbar-brand display-4" href="#">Trippr</a>
+        <a class="navbar-brand display-4" href="/dashboard">Trippr</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Start a New Trip</a>
+                    <a class="nav-link" href="/dashboard/trips/new" tabindex="-1" aria-disabled="true">Start a New Trip</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="#" tabindex="-1" aria-disabled="true">Trips</a>
+                    <a class="nav-link active" href="/dashboard/trips" tabindex="-1" aria-disabled="true">Trips</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Friends</a>
+                    <a class="nav-link" href="/dashboard/friends" tabindex="-1" aria-disabled="true">Friends</a>
                 </li>
             </ul>
         </div>
@@ -83,6 +83,7 @@
                     <button type="submit" name="cancel_trip" class="btn btn-outline-danger mx-3">Cancel</button>
                 </form>
                 <form action="" method="POST">
+                    {% csrf_token %}
                     <button type="submit" class="btn btn-danger mx-3 float-right delete">Delete Trip</button>
                 </form>
             </div>

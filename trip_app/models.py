@@ -81,13 +81,13 @@ class Itinerary(models.Model):
     activity = models.CharField(max_length=255)
     address = models.CharField(max_length=255, blank=True)
     notes = models.TextField()
-    trip = models.ForeignKey(Trip, related_name="all_activities", on_delete=models.CASCADE)
+    trip = models.ForeignKey(Trip, related_name="trip_activities", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = TripManager()
 
 class PhotoAlbum(models.Model):
     photo = models.ImageField()
-    trip = models.ForeignKey(Trip, related_name="all_photos", on_delete=models.CASCADE)
+    trip = models.ForeignKey(Trip, related_name="trip_photos", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

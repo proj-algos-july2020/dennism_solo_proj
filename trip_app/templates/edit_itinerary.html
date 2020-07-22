@@ -37,7 +37,7 @@
         <div class="row">
             <div class="col-12">
                 <h4 class="display-4">{{ curr_trip.city }}, {{ curr_trip.country }}</h4>
-                <p>{{ curr_trip.start_date|date:'Y-m-d' }}</p>
+                <p>{{ curr_trip.start_date|date:'Y-m-d' }} - {{ curr_trip.start_date|date:'Y-m-d' }}</p>
             </div>
         </div>
         <div class="row justify-content-center">
@@ -51,16 +51,32 @@
                             <th>Activity</th>
                             <th>Address</th>
                             <th>Notes</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        
+                        {% for activity in curr_trip.trip_activities.all|dictsort:"date" %}
+                        <tr>
+                            <td>{{ activity.date }}</td>
+                            <td>{{ activity.start_time }} - {{ activity.end_time }}</td>
+                            <td>{{ activity.activity }}</td>
+                            <td>{{ activity.address }}</td>
+                            <td>{{ activity.notes }}</td>
+                            <td><a href="/dashboard/trips/{{ curr_trip.id }}/itinerary/{{ activity.id }}">Edit</a></td>
+                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
             <div class="col-4">
-                <h5>Add New Activity</h5>
-                <form action="/login" method="POST">
+                <div class="row">
+                    <h5>Edit Activity #{{ curr_activity.id }}</h5>
+                    <form action="/dashboard/trips/{{ curr_trip.id }}/itinerary/{{ curr_activity_id }}/remove" method="POST">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger mx-3 float-right delete">Delete</button>
+                    </form>
+                </div>
+                <form action="/dashboard/trips/{{ curr_trip.id }}/itinerary/{{ curr_activity_id }}" method="POST">
                     {% csrf_token %}
                     {% if messages %}
                         <div class="messages">    
@@ -77,31 +93,32 @@
                     {% endif %}
                     <div class="form-group">
                         <label for="date">Date</label>
-                        <input type="date" class="form-control" name="date" id="date">
+                        <input type="date" class="form-control" name="date" id="date" value="{{ curr_activity.date|date:'Y-m-d' }}">
                     </div>
                     <div class="form-group form-inline">
                         <div class="col-6">
                             <label for="start_time">Start Time</label>
-                            <input type="time" class="form-control" name="start_time" id="start_time">
+                            <input type="time" class="form-control" name="start_time" id="start_time" value="{{ curr_activity.start_time|time: 'H:i' }}">
                         </div>
                         <div class="col-6">
                             <label for="end_time">End Time</label>
-                            <input type="time" class="form-control" name="end_time" id="end_time">
+                            <input type="time" class="form-control" name="end_time" id="end_time" value="{{ curr_activity.end_time|time: 'H:i' }}">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="activity">Activity</label>
-                        <input type="text" class="form-control" name="activity" id="activity">
+                        <input type="text" class="form-control" name="activity" id="activity" value="{{ curr_activity.activity }}">
                     </div>
                     <div class="form-group">
                         <label for="address">Address (if applicable)</label>
-                        <input type="text" class="form-control" name="address" id="address">
+                        <input type="text" class="form-control" name="address" id="address" value="{{ curr_activity.address }}">
                     </div>
                     <div class="form-group">
                         <label for="notes">Notes</label>
-                        <textarea name="notes" id="notes" rows="10" class="form-control" placeholder="Enter your notes here..."></textarea>
+                        <textarea name="notes" id="notes" rows="10" class="form-control" value="{{ curr_activity.notes }}"></textarea>
                     </div>
                     <button type="submit" class="btn btn-outline-primary">Add Activity</button>
+                    <button type="submit" name="cancel" class="btn btn-outline-danger">Cancel</button>
                 </form>
             </div>
         </div>

@@ -19,7 +19,8 @@ def trip_dashboard(request):
 
 def friends_dashboard(request):
     context = {
-        "curr_user": User.objects.get(id=request.session['user_id'])
+        "curr_user": User.objects.get(id=request.session['user_id']),
+        "all_users": User.objects.all()
     }
     return render(request, 'friends_dashboard.html', context)
 
@@ -28,6 +29,13 @@ def itinerary_dashboard(request, trip_id):
         "curr_trip": Trip.objects.get(id=trip_id)
     }
     return render(request, 'itinerary.html', context)
+
+def edit_activity_dashboard(request, trip_id, itinerary_id):
+    context = {
+        "curr_trip": Trip.objects.get(id=trip_id),
+        "curr_activity": Itinerary.objects.get(id=itinerary_id)
+    }
+    return render(request, 'edit_itinerary.html', context)
 
 def expense_log(request, trip_id):
     context = {
@@ -100,5 +108,41 @@ def add_remove_participant(request, trip_id):
         curr_trip.users_joined.add(user_added)
     return redirect(f'/dashboard/trips/view/{trip_id}')
 
-def add_friend(request):
-    
+def add_remove_friend(request):
+    friend_added = User.objects.get(id=request.POST['friend'])
+    curr_user = User.objects.get(id=request.session['user_id'])
+    if friend_added in curr_user.friends.all():
+        curr_user.friends.remove(friend_added)
+    else:
+        curr_user.friends.add(friend_added)
+    return redirect('/dashboard/friends')
+
+def add_activity(request, trip_id):
+    errors = Itinerary.objects.itinerary_validator(request.POST)
+    if len(errors) > 0:
+        for key, value in errors.items():
+            messages.error(request, value)
+        return redirect(f'/dashboard/trips/{trip_id}/itinerary')
+    else:
+        curr_trip = Trip.objects.get(id=trip_id)
+        new_activity = Itinerary.objects.create(date=request.POST['date'], start_time=request.POST['start_time'], end_time=request.POST['end_time'], activity=request.POST['activity'], address=request.POST['address'], notes=request.POST['notes'], trip=curr_trip)
+        return redirect('/dashboard/trips/{trip_id}/itinerary')
+
+def edit_activity(request, trip_id, itinerary_id):
+    if 'cancel' in request.POST:
+        return redirect(f'/dashboard/trips/{trip_id}/itinerary/')
+    errors = Itinerary.objects.itinerary_validator(request.POST)
+    if len(errors) > 0:
+        for key, value in errors.items():
+            messages.error(request, value)
+        return redirect(f'/dashboard/trips/{trip_id}/itinerary/{itinerary_id}')
+    else:
+        curr_activity = Itinerary.objects.get(id=itinerary_id)
+        curr_activity.date = request.POST['date']
+        curr_activity.start_time = request.POST['start_time']
+        curr_activity.end_time = request.POST['end_time']
+        curr_activity.activity = request.POST['activity']
+        curr_activity.address = request.POST['address']
+        curr_activity.notes = request.POST['notes']
+        curr_activity.save()
+        return redirect(f'/dashboard/trips/{trip_id}/itinerary')
