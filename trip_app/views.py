@@ -149,6 +149,7 @@ def add_activity(request, trip_id):
     else:
         curr_trip = Trip.objects.get(id=trip_id)
         new_activity = Itinerary.objects.create(date=request.POST['date'], start_time=request.POST['start_time'], end_time=request.POST['end_time'], activity=request.POST['activity'], address=request.POST['address'], notes=request.POST['notes'], trip=curr_trip)
+        messages.success(request, "New Activity has been added.")
         return redirect(f'/dashboard/trips/{trip_id}/itinerary')
 
 def edit_activity(request, trip_id, itinerary_id):
@@ -168,6 +169,7 @@ def edit_activity(request, trip_id, itinerary_id):
         curr_activity.address = request.POST['address']
         curr_activity.notes = request.POST['notes']
         curr_activity.save()
+        messages.success(request, f"Activity #{itinerary_id} has been updated.")
         return redirect(f'/dashboard/trips/{trip_id}/itinerary')
 
 def remove_activity(request, trip_id, activity_id):
@@ -184,6 +186,7 @@ def add_expense(request, trip_id):
     else:
         curr_trip = Trip.objects.get(id=trip_id)
         new_expense = Expense.objects.create(amount=request.POST['amount'], paid_by=User.objects.get(id=request.POST['paid_by']), notes=request.POST['notes'], trip=curr_trip)
+        messages.success(request, "New Expense has been added.")
         return redirect(f'/dashboard/trips/{trip_id}/expense')
 
 def edit_expense(request, trip_id, expense_id):
@@ -200,6 +203,7 @@ def edit_expense(request, trip_id, expense_id):
         curr_expense.paid_by = User.objects.get(id=request.POST['paid_by'])
         curr_expense.notes = request.POST['notes']
         curr_expense.save()
+        messages.success(request, f"Activity #{expense_id} has been updated.")
         return redirect(f'/dashboard/trips/{trip_id}/expense')
 
 def remove_expense(request, trip_id, expense_id):
