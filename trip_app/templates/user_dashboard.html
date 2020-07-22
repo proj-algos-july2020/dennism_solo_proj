@@ -28,7 +28,7 @@
             </ul>
         </div>
         <form class="form-inline my-2 my-lg-0" method="POST" action="/logout" >
-            <p class="greet">Welcome, Dennis!</p>
+            <p class="greet">Welcome, {{ curr_user.first_name|title }}!</p>
             <button class="btn btn-danger my-2 my-sm-0" type="submit">Log Out</button>
         </form>
     </nav>
@@ -45,7 +45,7 @@
             <div class="col-10">
                 <div class="form-group">
                     <p>Name</p>
-                    <h4>{{ curr_user.first_name }}, {{ curr_user.last_name }}</h4>
+                    <h4>{{ curr_user.first_name|title }}, {{ curr_user.last_name|title   }}</h4>
                 </div>
                 <div class="form-group">
                     <p>Email</p>
@@ -53,14 +53,14 @@
                 </div>
                 <div class="form-group">
                     <p>Date of Birth</p>
-                    <h5>{{ curr_user.birthday|date:'Y-m-d' }}</h5>
+                    <h5>{{ curr_user.birthday|date:'M d, Y' }}</h5>
                 </div>
             </div>
         </div>
         <div class="row justify-content-center">
             <div class="col-12">
                 <h5>Upcoming Trips</h5>
-                <a href="">All trips >></a>
+                <a href="/dashboard/trips">All trips >></a>
                 <table class="table">
                     <thead class="thead-light">
                          <tr>
@@ -72,20 +72,40 @@
                        </tr>
                    </thead>
                    <tbody>
-                       
-                   </tbody>
+                        {% for trip in all_trips|dictsort: "start_date" %}
+                        {% if trip in curr_user.trips_joined.all and trip.start_date >= today %}
+                        <tr>
+                            {% if trip.state != '' %}
+                            <td><a href="/dashboard/trips/view/{{ trip.id }}">{{ trip.city|title }}, {{ trip.state }} ({{ trip.country|title }})</a></td>
+                            {% else %}
+                            <td><a href="/dashboard/trips/view/{{ trip.id }}">{{ trip.city|title }} ({{ trip.country|title }})</a></td>
+                            {% endif %}
+                            <td>{{ trip.start_date|date: "M d, Y" }}</td>
+                            <td>{{ trip.end_date|date: "M d, Y" }}</td>
+                            <td>{{ trip.created_by.first_name|title }} {{ trip.created_by.last_name|title }}</td>
+                            <td>{{ trip.users_joined|length }}</td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                   </tbody> 
                </table>
-               <form action="" method="GET">
+               <form action="/dashboard/trips/new" method="GET">
                    <button type="submit" class="btn btn-outline-success">Create a New Trip</button>
                </form>
                 <h5>Friends List</h5>
-                <a href="">All friends >></a>
+                <a href="/dashboard/friends">All friends >></a>
                 <table class="table friend-list">
                     <tr>
+                        {% for friend in curr_user.friends.all|slice:":5" %}
                         <td>
-                            <img src="../../login_register_app/static/img/profile-placeholder.png" alt="Profile Picture" class="prof-pic-friend">
-                            <p>Jordan</p>
+                            {% if not curr_user.prof_pic %}
+                            <img src="../../login_register_app/static/img/profile-placeholder.png" alt="Profile Picture" class="prof-pic">
+                            {% else %}
+                            <img src="{{ friend.prof_pic.url }}" alt="Profile Picture" class="prof-pic">
+                            {% endif %}
+                            <p>{{ friend.first_name|title }} {{ friend.last_name|title }}</p>
                         </td>
+                        {% endfor %}
                     </tr>
                 </table>
             </div>

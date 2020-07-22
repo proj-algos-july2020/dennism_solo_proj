@@ -12,6 +12,10 @@ class TripManager(models.Manager):
         if postData['country'] == '':
             errors['country'] = 'Country is required.'
 
+        if postData['state'] != '':
+            if len(postData['state']) != 2:
+                errors['state'] = 'State must have 2 characters.'
+
         if postData['start_date'] == '':
             errors['start_date'] = "Trip start date is required."
         
@@ -69,7 +73,7 @@ class Expense(models.Model):
     amount = models.DecimalField(decimal_places=2, max_digits=100)
     paid_by = models.ForeignKey(User, related_name="expenses_paid", on_delete=models.CASCADE)
     notes = models.TextField()
-    trip = models.ForeignKey(Trip, related_name="all_expenses", on_delete=models.CASCADE)
+    trip = models.ForeignKey(Trip, related_name="trip_expenses", on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = TripManager()

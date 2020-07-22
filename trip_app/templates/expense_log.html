@@ -28,17 +28,17 @@
             </ul>
         </div>
         <form class="form-inline my-2 my-lg-0" method="POST" action="/logout" >
-            <p class="greet">Welcome, Dennis!</p>
+            <p class="greet">Welcome, {{ curr_user.first_name|title }}!</p>
             <button class="btn btn-danger my-2 my-sm-0" type="submit">Log Out</button>
         </form>
     </nav>
 
     <div class="container">
-        <a href=""><< Back to Trip</a>
+        <a href="/dashboard/trips/{{ curr_trip.id }}"><< Back to Trip</a>
         <div class="row">
             <div class="col-12">
                 <h4 class="display-4">{{ curr_trip.city }}, {{ curr_trip.country }}</h4>
-                <p>{{ curr_trip.start_date|date:'Y-m-d' }}</p>
+                <p>{{ curr_trip.start_date|date:'M d, Y' }} - {{ curr_trip.end_date|date:'M d, Y' }}</p>
             </div>
         </div>
         <div class="row justify-content-center">
@@ -50,10 +50,22 @@
                             <th>Amount</th>
                             <th>Paid By</th>
                             <th>Notes</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        
+                        {% if curr_trip.trip_expenses %}
+                        {% for expense in curr_trip.trip_expenses.all %}
+                        <tr>
+                            <td>${{ expense.amount }}</td>
+                            <td>{{ expense.paid_by.first_name|title }} {{ expense.paid_by.last_name|title }}</td>
+                            <td>{{ expense.notes }}</td>
+                            <td><a href="/dashboard/trips/{{ curr_trip.id }}/expense/{{ expense.id }}">Edit</a>
+                                <a href="/dashboard/trips/{{ curr_trip.id }}/expense/{{ expense.id }}/remove">Delete</a>
+                            </td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
@@ -74,10 +86,9 @@
                         <div class="form-group">
                             <label for="paid_by">Paid By</label>
                             <select id="paid_by" name="paid_by" size="1" class="form-control">
-                                <option value="{{ user.id }}">Volvo</option>
-                                <option value="saab">Saab</option>
-                                <option value="fiat">Fiat</option>
-                                <option value="audi">Audi</option>
+                                {% for participant in curr_trip.users_joined.all %}
+                                <option value="{{ participant.id }}">{{ participant.first_name|title }} {{ participant.last_name|title }}</option>
+                                {% endfor %}
                             </select>
                         </div>
                         <div class="form-group">

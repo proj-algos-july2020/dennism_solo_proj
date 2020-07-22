@@ -28,11 +28,12 @@
             </ul>
         </div>
         <form class="form-inline my-2 my-lg-0" method="POST" action="/logout" >
-            <p class="greet">Welcome, Dennis!</p>
+            <p class="greet">Welcome, {{ curr_user.first_name|title }}!</p>
             <button class="btn btn-danger my-2 my-sm-0" type="submit">Log Out</button>
         </form>
     </nav>
     <div class="container">
+        <h4 class="display-4">All Trips</h4>
         <div class="row justify-content-center">
             <div class="col-12">
                 <h5>Upcoming Trips</h5>
@@ -44,12 +45,32 @@
                             <th>End Date</th>
                             <th>Created By</th>
                             <th>Participants</th>
-                            <th>Action</th>
+                            <th></th>
                        </tr>
                    </thead>
                    <tbody>
-                       
-                   </tbody>
+                        {% for trip in all_trips|dictsort: "start_date" %}
+                        {% if trip in curr_user.trips_joined.all and trip.start_date >= today %}
+                        <tr>
+                            {% if trip.state != '' %}
+                            <td><a href="/dashboard/trips/{{ trip.id }}">{{ trip.city|title }}, {{ trip.state }} ({{ trip.country|title }})</a></td>
+                            {% else %}
+                            <td><a href="/dashboard/trips/{{ trip.id }}">{{ trip.city|title }} ({{ trip.country|title }})</a></td>
+                            {% endif %}
+                            <td>{{ trip.start_date|date: "M d, Y" }}</td>
+                            <td>{{ trip.end_date|date: "M d, Y" }}</td>
+                            <td>{{ trip.created_by.first_name|title }} {{ trip.created_by.last_name|title }}</td>
+                            <td>{{ trip.users_joined|length }}</td>
+                            {% if curr_user == trip.created_by %}
+                            <td><a href="/dashboard/trips/{{ trip.id }}/remove">Remove</a></td>
+                            {% else %}
+                            <td><a href="/dashboard/trips/{{ trip.id }}/leave">Leave</a></td>
+                            {% endif %}
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                   </tbody> 
+               </table>
                </table>
             </div>
         </div>
@@ -58,19 +79,38 @@
                 <h5>Past Trips</h5>
                 <table class="table">
                     <thead class="thead-light">
-                        <tr>
+                         <tr>
                             <th>Destination</th>
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th>Created By</th>
                             <th>Participants</th>
-                            <th>Action</th>
+                            <th></th>
+                       </tr>
+                   </thead>
+                   <tbody>
+                        {% for trip in all_trips|dictsort: "start_date" %}
+                        {% if trip in curr_user.trips_joined.all and trip.start_date < today %}
+                        <tr>
+                            {% if trip.state != '' %}
+                            <td><a href="/dashboard/trips/{{ trip.id }}">{{ trip.city|title }}, {{ trip.state }} ({{ trip.country|title }})</a></td>
+                            {% else %}
+                            <td><a href="/dashboard/trips/{{ trip.id }}">{{ trip.city|title }} ({{ trip.country|title }})</a></td>
+                            {% endif %}
+                            <td>{{ trip.start_date|date: "M d, Y" }}</td>
+                            <td>{{ trip.end_date|date: "M d, Y" }}</td>
+                            <td>{{ trip.created_by.first_name|title }} {{ trip.created_by.last_name|title }}</td>
+                            <td>{{ trip.users_joined|length }}</td>
+                            {% if curr_user == trip.created_by %}
+                            <td><a href="/dashboard/trips/{{ trip.id }}/remove">Remove</a></td>
+                            {% else %}
+                            <td><a href="/dashboard/trips/{{ trip.id }}/leave">Leave</a></td>
+                            {% endif %}
                         </tr>
-                    </thead>
-                    <tbody>
-                       
-                    </tbody>
-                </table>
+                        {% endif %}
+                        {% endfor %}
+                   </tbody> 
+               </table>
             </div>
         </div>
     </div>

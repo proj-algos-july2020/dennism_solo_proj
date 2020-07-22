@@ -28,11 +28,12 @@
             </ul>
         </div>
         <form class="form-inline my-2 my-lg-0" method="POST" action="/logout">
-            <p class="greet">Welcome, Dennis!</p>
+            <p class="greet">Welcome, {{ curr_user.first_name|title }}!</p>
             <button class="btn btn-danger my-2 my-sm-0" type="submit">Log Out</button>
         </form>
     </nav>
     <div class="container">
+        <a href="/dashboard/trips"><< Back to All Trips</a>
         <div class="row justify-content-center">
             <div class="col-6">
                 <h4 class="display-4">Trip Information</h4>
@@ -42,56 +43,68 @@
                 </div>
                 <div class="form-group">
                     <p>When</p>
-                    <h5>{{ curr_trip.start_date|date:'Y-m-d' }}</h5>
+                    <h5>{{ curr_trip.start_date|date:'M d, Y' }} - {{ curr_trip.end_date|date:'M d, Y' }}</h5>
                 </div>
-                <form action="">
+                <div class="form-group">
+                    <p>Created By</p>
+                    <h5>{{ curr_trip.created_by.first_name|title }} {{ curr_trip.created_by.last_name|title }}</h5>
+                </div>
+                <p class="info">created at {{ curr_trip.created_at|date:'M d, Y H:i A' }}</p>
+                <p class="info">last updated at {{ curr_trip.updated_at|date:'M d, Y H:i A' }}</p>
+                {% if curr_user == curr_trip.created_by %}
+                <form action="/dashboard/trips/edit/{{ curr_trip }}" method="GET">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-outline-primary">Edit Trip</button>
-                    <button type="submit" name="delete_trip" class="btn btn-outline-danger">Delete Trip</button>
+                    <button type="submit" name="cancel_trip" class="btn btn-outline-danger">Delete Trip</button>
                 </form>
+                {% endif %}
                 <table class="table">
                     <thead class="thead-light">
                         <tr>
                             <th>Trip Participants</th>
-                            <th>Action</th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        
+                        {% for participant in curr_trip.users_joined.all %}
+                        {% if participant != curr_trip.created_by %}
+                        <tr>
+                            <td>{{ participant.first_name|title }} {{ participant.last_name|title }}</td>
+                            {% if curr_user == curr_trip.created_by %}
+                            <td>
+                                <form action="/dashboard/trips/{{ curr_trip.id }}/participate" method="POST">
+                                    {% csrf_token %}
+                                    <input type="number" name="participant" id="participant" value="{{ participant.id }}" hidden>
+                                    <button type="submit" class="btn btn-outline-danger">Remove</button>
+                                </form>
+                            </td>
+                            {% else %}
+                            <td></td>
+                            {% endif %}
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
                     </tbody>
                 </table>
-                <form action="" method="POST">
+                <form action="/dashboard/trips/{{ curr_trip.id }}/participate/" method="POST">
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="participant">Add Participant</label>
                         <select id="participant" name="participant" size="1" class="form-control">
-                            <option value="{{ user.id }}">Volvo</option>
-                            <option value="saab">Saab</option>
-                            <option value="fiat">Fiat</option>
-                            <option value="audi">Audi</option>
+                            {% for friend in curr_user.friends.all %}
+                            {% if friend not in curr_trip.users_joined.all %}
+                            <option value="{{ friend.id }}">{{ friend.first_name|title }} {{ friend.last_name|title }}</option>
+                            {% endif %}
+                            {% endfor %}
                         </select>
                     </div>
                     <button type="submit" class="btn btn-outline-primary">Add</button>
                     <hr>
                 </form>
-                <hr>
-                <h5>Expense Log</h5>
-                <a href="">Edit >></a>
-                <table class="table">
-                    <thead class="thead-light">
-                        <tr>
-                            <th>Amount</th>
-                            <th>Paid By</th>
-                            <th>Notes</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        
-                    </tbody>
-                </table>
-            </div>
+            </div> 
             <div class="col-6">
                 <h4 class="display-4">Itinerary</h4>
+                {% if curr_trip.trip_activities %}
                 <a href="">Edit >></a>
                 <table class="table">
                     <thead class="thead-light">
@@ -104,9 +117,51 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
+                        {% for activity in curr_trip.trip_activities.all %}
+                        <tr>
+                            <td>{{ activity.date|date:"M d, Y" }}</td>
+                            <td>{{ activity.start_time|time:"H:i A" }} - {{ activity.end_time|time:"H:i A" }}</td>
+                            <td>{{ activity.activity }}</td>
+                            <td>{{ activity.address }}</td>
+                            <td>{{ activity.notes }}</td>
+                        </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
+                {% else %}
+                <form action="/dashboard/trips/{{ curr_trip.id }}/itinerary">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-success">Add Itinerary</button>
+                </form> 
+                {% endif %}
+                <hr>
+                <h5>Expense Log</h5>
+                {% if curr_trip.trip_expenses %}
+                <a href="/dashboard/trips/{{ curr_trip.id }}/expense">Edit >></a>
+                <table class="table">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Amount</th>
+                            <th>Paid By</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for expense in curr_trip.trip_expenses.all %}
+                        <tr>
+                            <td>${{ expense.amount }}</td>
+                            <td>{{ expense.paid_by.first_name|title }} {{ expense.paid_by.last_name|title }}</td>
+                            <td>{{ expense.notes }}</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+                {% else %}
+                <form action="/dashboard/trips/{{ curr_trip.id }}/expense">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-success">Add Expense</button>
+                </form> 
+                {% endif %}
                 <hr>
                 <form action="" method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
