@@ -27,7 +27,8 @@
                 </li>
             </ul>
         </div>
-        <form class="form-inline my-2 my-lg-0" method="POST" action="/logout" >
+        <form class="form-inline my-2 my-lg-0" method="POST" action="/logout">
+            {% csrf_token %}
             <p class="greet">Welcome, {{ curr_user.first_name|title }}!</p>
             <button class="btn btn-danger my-2 my-sm-0" type="submit">Log Out</button>
         </form>
@@ -36,7 +37,7 @@
         <div class="row justify-content-center">
             <div class="col-12">
                 <h4 class="display-4">Create a Trip</h4>
-                <form action="/trips/new/process" method="POST">
+                <form action="/dashboard/trips/new/process" method="POST">
                     {% csrf_token %}
                     {% if messages %}
                     <div class="messages">    

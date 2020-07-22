@@ -27,7 +27,8 @@
                 </li>
             </ul>
         </div>
-        <form class="form-inline my-2 my-lg-0" method="POST" action="/logout" >
+        <form class="form-inline my-2 my-lg-0" method="POST" action="/logout">
+            {% csrf_token %}
             <p class="greet">Welcome, {{ curr_user.first_name|title }}!</p>
             <button class="btn btn-danger my-2 my-sm-0" type="submit">Log Out</button>
         </form>
@@ -54,7 +55,7 @@
         <hr>
         <div class="row">
             {% for user in all_users %}
-            {% if user not in curr_user.friends.all %}
+            {% if user not in curr_user.friends.all and user != curr_user %}
             <div class="col-2 friend">
                 {% if not user.prof_pic %}
                 <img src="../../login_register_app/static/img/profile-placeholder.png" alt="Profile Picture" class="prof-pic">
@@ -66,6 +67,7 @@
                     <button class="btn btn-outline-success" type="submit">Add</button>
                 </form>
             </div>
+            {% endif %}
             {% endfor %}
         </div>
     </div>

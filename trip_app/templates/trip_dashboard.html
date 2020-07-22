@@ -27,7 +27,8 @@
                 </li>
             </ul>
         </div>
-        <form class="form-inline my-2 my-lg-0" method="POST" action="/logout" >
+        <form class="form-inline my-2 my-lg-0" method="POST" action="/logout">
+            {% csrf_token %}
             <p class="greet">Welcome, {{ curr_user.first_name|title }}!</p>
             <button class="btn btn-danger my-2 my-sm-0" type="submit">Log Out</button>
         </form>
@@ -49,16 +50,16 @@
                        </tr>
                    </thead>
                    <tbody>
-                        {% for trip in all_trips|dictsort: "start_date" %}
-                        {% if trip in curr_user.trips_joined.all and trip.start_date >= today %}
+                        {% for trip in all_trips|dictsort:"start_date" %}
+                        {% if trip in curr_user.trips_joined.all and trip.start_date|date:'Y-m-d' > today|date:'Y-m-d' %}
                         <tr>
                             {% if trip.state != '' %}
-                            <td><a href="/dashboard/trips/{{ trip.id }}">{{ trip.city|title }}, {{ trip.state }} ({{ trip.country|title }})</a></td>
+                            <td><a href="/dashboard/trips/{{ trip.id }}">{{ trip.city|title }}, {{ trip.state }} ({{ trip.country }})</a></td>
                             {% else %}
-                            <td><a href="/dashboard/trips/{{ trip.id }}">{{ trip.city|title }} ({{ trip.country|title }})</a></td>
+                            <td><a href="/dashboard/trips/{{ trip.id }}">{{ trip.city|title }} ({{ trip.country }})</a></td>
                             {% endif %}
-                            <td>{{ trip.start_date|date: "M d, Y" }}</td>
-                            <td>{{ trip.end_date|date: "M d, Y" }}</td>
+                            <td>{{ trip.start_date|date:"M d, Y" }}</td>
+                            <td>{{ trip.end_date|date:"M d, Y" }}</td>
                             <td>{{ trip.created_by.first_name|title }} {{ trip.created_by.last_name|title }}</td>
                             <td>{{ trip.users_joined|length }}</td>
                             {% if curr_user == trip.created_by %}
@@ -89,7 +90,7 @@
                        </tr>
                    </thead>
                    <tbody>
-                        {% for trip in all_trips|dictsort: "start_date" %}
+                        {% for trip in all_trips|dictsort:"start_date" %}
                         {% if trip in curr_user.trips_joined.all and trip.start_date < today %}
                         <tr>
                             {% if trip.state != '' %}
@@ -97,8 +98,8 @@
                             {% else %}
                             <td><a href="/dashboard/trips/{{ trip.id }}">{{ trip.city|title }} ({{ trip.country|title }})</a></td>
                             {% endif %}
-                            <td>{{ trip.start_date|date: "M d, Y" }}</td>
-                            <td>{{ trip.end_date|date: "M d, Y" }}</td>
+                            <td>{{ trip.start_date|date:"M d, Y" }}</td>
+                            <td>{{ trip.end_date|date:"M d, Y" }}</td>
                             <td>{{ trip.created_by.first_name|title }} {{ trip.created_by.last_name|title }}</td>
                             <td>{{ trip.users_joined|length }}</td>
                             {% if curr_user == trip.created_by %}

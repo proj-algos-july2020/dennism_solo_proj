@@ -15,7 +15,8 @@ def user_dashboard(request):
 def trip_dashboard(request):
     context = {
         "all_trips": Trip.objects.all(),
-        "curr_user": User.objects.get(id=request.session['user_id'])
+        "curr_user": User.objects.get(id=request.session['user_id']),
+        "today": datetime.now()
     }
     return render(request, 'trip_dashboard.html', context)
 
