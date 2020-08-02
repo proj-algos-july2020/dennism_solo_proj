@@ -27,37 +27,48 @@
                 </li>
             </ul>
         </div>
+        <p class="greet">Welcome, {{ curr_user.first_name|title }}!</p>
         <form class="form-inline my-2 my-lg-0" method="POST" action="/logout">
             {% csrf_token %}
-            <p class="greet">Welcome, {{ curr_user.first_name|title }}!</p>
             <button class="btn btn-danger my-2 my-sm-0" type="submit">Log Out</button>
         </form>
     </nav>
     <div class="container">
         <h4 class="display-4">User Profile</h4>
-        <div class="row justify-content-center">
-            <div class="col-2">
+        <div class="row">
+            <div class="col-3 friend">
                 {% if not curr_user.prof_pic %}
-                    <img src="../../login_register_app/static/img/profile-placeholder.png" alt="Profile Picture" class="prof-pic">
+                    <img src="{% static '/img/profile-placeholder.png' %}" alt="Profile Picture" class="prof-pic">
                 {% else %}
                     <img src="{{ curr_user.prof_pic.url }}" alt="Profile Picture" class="prof-pic">
                 {% endif %}
             </div>
-            <div class="col-10">
+            <div class="col-9">
                 <div class="form-group">
                     <p>Name</p>
-                    <h4>{{ curr_user.first_name|title }}, {{ curr_user.last_name|title   }}</h4>
+                    <h2>{{ curr_user.first_name|title }}, {{ curr_user.last_name|title }}</h2>
                 </div>
                 <div class="form-group">
                     <p>Email</p>
-                    <h5>{{ curr_user.email }}</h5>
+                    <h4>{{ curr_user.email }}</h4>
                 </div>
                 <div class="form-group">
                     <p>Date of Birth</p>
-                    <h5>{{ curr_user.birthday|date:'M d, Y' }}</h5>
+                    <h4>{{ curr_user.birthday|date:'M d, Y' }}</h4>
                 </div>
+                {% if not curr_user.prof_pic %}
+                <form action="/dashboard/upload" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group profile">
+                        <p>Upload Profile Picture</p>
+                        <input type="file" class="form-control" name="photo" id="photo">
+                        <button type="submit" class="btn btn-outline-primary">Upload</button>
+                    </div>
+                </form>
+                {% endif %}
             </div>
         </div>
+        <hr>
         <div class="row justify-content-center">
             <div class="col-12">
                 <h5>Upcoming Trips</h5>
@@ -77,9 +88,9 @@
                         {% if trip in curr_user.trips_joined.all and trip.start_date|date:'Y-m-d' > today|date:'Y-m-d' %}
                         <tr>
                             {% if trip.state != '' %}
-                            <td><a href="/dashboard/trips/view/{{ trip.id }}">{{ trip.city|title }}, {{ trip.state }} ({{ trip.country|title }})</a></td>
+                            <td><a href="/dashboard/trips/{{ trip.id }}">{{ trip.city|title }}, {{ trip.state }} ({{ trip.country }})</a></td>
                             {% else %}
-                            <td><a href="/dashboard/trips/view/{{ trip.id }}">{{ trip.city|title }} ({{ trip.country|title }})</a></td>
+                            <td><a href="/dashboard/trips/{{ trip.id }}">{{ trip.city|title }} ({{ trip.country|title }})</a></td>
                             {% endif %}
                             <td>{{ trip.start_date|date:"M d, Y" }}</td>
                             <td>{{ trip.end_date|date:"M d, Y" }}</td>
@@ -89,26 +100,26 @@
                         {% endif %}
                         {% endfor %}
                    </tbody> 
-               </table>
-               <form action="/dashboard/trips/new" method="GET">
+                </table>
+                <form action="/dashboard/trips/new" method="GET">
+                    {% csrf_token %}
                    <button type="submit" class="btn btn-outline-success">Create a New Trip</button>
-               </form>
+                </form>
+                <hr>
                 <h5>Friends List</h5>
                 <a href="/dashboard/friends">All friends >></a>
-                <table class="table friend-list">
-                    <tr>
-                        {% for friend in curr_user.friends.all|slice:":5" %}
-                        <td>
-                            {% if not curr_user.prof_pic %}
-                            <img src="../../login_register_app/static/img/profile-placeholder.png" alt="Profile Picture" class="prof-pic">
-                            {% else %}
-                            <img src="{{ friend.prof_pic.url }}" alt="Profile Picture" class="prof-pic">
-                            {% endif %}
-                            <p>{{ friend.first_name|title }} {{ friend.last_name|title }}</p>
-                        </td>
-                        {% endfor %}
-                    </tr>
-                </table>
+                <div class="row">
+                    {% for friend in curr_user.friends.all|slice:":6" %}
+                    <div class="col-2 friend">
+                        {% if not friend.prof_pic %}
+                        <img src="{% static '/img/profile-placeholder.png' %}" alt="Profile Picture" class="prof-pic">
+                        {% else %}
+                        <img src="{{ friend.prof_pic.url }}" alt="Profile Picture" class="prof-pic">
+                        {% endif %}
+                        <p>{{ friend.first_name|title }} {{ friend.last_name|title }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
     </div>

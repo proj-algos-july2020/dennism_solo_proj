@@ -27,9 +27,9 @@
                 </li>
             </ul>
         </div>
+        <p class="greet">Welcome, {{ curr_user.first_name|title }}!</p>
         <form class="form-inline my-2 my-lg-0" method="POST" action="/logout">
             {% csrf_token %}
-            <p class="greet">Welcome, {{ curr_user.first_name|title }}!</p>
             <button class="btn btn-danger my-2 my-sm-0" type="submit">Log Out</button>
         </form>
     </nav>
@@ -63,7 +63,7 @@
                             <td>{{ trip.created_by.first_name|title }} {{ trip.created_by.last_name|title }}</td>
                             <td>{{ trip.users_joined|length }}</td>
                             {% if curr_user == trip.created_by %}
-                            <td><a href="/dashboard/trips/{{ trip.id }}/remove">Remove</a></td>
+                            <td><a href="/dashboard/trips/{{ trip.id }}/remove" class="red">Remove</a></td>
                             {% else %}
                             <td><a href="/dashboard/trips/{{ trip.id }}/leave">Leave</a></td>
                             {% endif %}
@@ -103,7 +103,7 @@
                             <td>{{ trip.created_by.first_name|title }} {{ trip.created_by.last_name|title }}</td>
                             <td>{{ trip.users_joined|length }}</td>
                             {% if curr_user == trip.created_by %}
-                            <td><a href="/dashboard/trips/{{ trip.id }}/remove">Remove</a></td>
+                            <td><a href="/dashboard/trips/{{ trip.id }}/remove" class="red">Remove</a></td>
                             {% else %}
                             <td><a href="/dashboard/trips/{{ trip.id }}/leave">Leave</a></td>
                             {% endif %}

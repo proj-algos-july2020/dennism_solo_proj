@@ -47,8 +47,8 @@ class TripManager(models.Manager):
             errors['end_time'] = 'End time is required.'
 
         if postData['start_time'] != '' and postData['end_time'] != '':
-            start = datetime.time(postData['start_time'])
-            end = datetime.time(postData['end_time'])
+            start = postData['start_time']
+            end = postData['end_time']
             if start > end:
                 errors['start_time'] = 'Time travel is not allowed!'
         

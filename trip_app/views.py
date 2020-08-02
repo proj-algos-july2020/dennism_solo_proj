@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from datetime import datetime
+from django.core.files.storage import FileSystemStorage
 from login_register_app.models import User
 from .models import Trip, Expense, Itinerary, PhotoAlbum
 
@@ -173,8 +174,8 @@ def edit_activity(request, trip_id, itinerary_id):
         messages.success(request, f"Activity #{itinerary_id} has been updated.")
         return redirect(f'/dashboard/trips/{trip_id}/itinerary')
 
-def remove_activity(request, trip_id, activity_id):
-    curr_activity = Itinerary.objects.get(id=activity_id)
+def remove_activity(request, trip_id, itinerary_id):
+    curr_activity = Itinerary.objects.get(id=itinerary_id)
     curr_activity.delete()
     return redirect(f'/dashboard/trips/{trip_id}/itinerary')
 
@@ -211,3 +212,11 @@ def remove_expense(request, trip_id, expense_id):
     curr_expense = Expense.objects.get(id=expense_id)
     curr_expense.delete()
     return redirect(f'/dashboard/trips/{trip_id}/expense')
+
+def upload_profpic(request):
+    if request.method == "POST":
+        uploaded_file = request.FILES['photo']
+        curr_user = User.objects.get(id=request.session['user_id'])
+        curr_user.prof_pic = uploaded_file
+        curr_user.save()
+    return redirect('/dashboard')

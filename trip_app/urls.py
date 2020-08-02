@@ -24,4 +24,5 @@ urlpatterns = [
     path('trips/<int:trip_id>/expense/<int:expense_id>', views.edit_expense_dashboard),
     path('trips/<int:trip_id>/expense/<int:expense_id>/edit', views.edit_expense),
     path('trips/<int:trip_id>/expense/<int:expense_id>/remove', views.remove_expense),
+    path('upload', views.upload_profpic)
 ]

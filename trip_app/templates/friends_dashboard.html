@@ -27,9 +27,9 @@
                 </li>
             </ul>
         </div>
+        <p class="greet">Welcome, {{ curr_user.first_name|title }}!</p>
         <form class="form-inline my-2 my-lg-0" method="POST" action="/logout">
             {% csrf_token %}
-            <p class="greet">Welcome, {{ curr_user.first_name|title }}!</p>
             <button class="btn btn-danger my-2 my-sm-0" type="submit">Log Out</button>
         </form>
     </nav>
@@ -40,31 +40,33 @@
             {% for friend in curr_user.friends.all %}
             <div class="col-2 friend">
                 {% if not friend.prof_pic %}
-                <img src="../../login_register_app/static/img/profile-placeholder.png" alt="Profile Picture" class="prof-pic">
+                <img src="{% static '/img/profile-placeholder.png' %}" alt="Profile Picture" class="prof-pic">
                 {% else %}
                 <img src="{{ friend.prof_pic.url }}" alt="Profile Picture" class="prof-pic">
                 {% endif %}
                 <p>{{ friend.first_name|title }} {{ friend.last_name|title }}</p>
-                <form action="/dashboards/friends/{{ friend.id }}" method="POST">
-                    <button class="btn btn-outline-danger" type="submit">Delete</button>
+                <form action="/dashboard/friends/{{ friend.id }}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-outline-danger del-friend" type="submit">Delete</button>
                 </form>
             </div>
             {% endfor %}
         </div>
-        <h4 class="display-4">Add Friend</h4>
+        <h4>Add Friend</h4>
         <hr>
         <div class="row">
             {% for user in all_users %}
             {% if user not in curr_user.friends.all and user != curr_user %}
             <div class="col-2 friend">
                 {% if not user.prof_pic %}
-                <img src="../../login_register_app/static/img/profile-placeholder.png" alt="Profile Picture" class="prof-pic">
+                <img src="{% static '/img/profile-placeholder.png' %}" alt="Profile Picture" class="prof-pic">
                 {% else %}
                 <img src="{{ user.prof_pic.url }}" alt="Profile Picture" class="prof-pic">
                 {% endif %}
-                <p>{{ friend.first_name|title }} {{ friend.last_name|title }}</p>
-                <form action="/dashboards/friends/{{ user.id }}" method="POST">
-                    <button class="btn btn-outline-success" type="submit">Add</button>
+                <p>{{ user.first_name|title }} {{ user.last_name|title }}</p>
+                <form action="/dashboard/friends/{{ user.id }}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn btn-outline-success add-friend" type="submit">Add</button>
                 </form>
             </div>
             {% endif %}

@@ -27,9 +27,9 @@
                 </li>
             </ul>
         </div>
+        <p class="greet">Welcome, {{ curr_user.first_name|title }}!</p>
         <form class="form-inline my-2 my-lg-0" method="POST" action="/logout">
             {% csrf_token %}
-            <p class="greet">Welcome, {{ curr_user.first_name|title }}!</p>
             <button class="btn btn-danger my-2 my-sm-0" type="submit">Log Out</button>
         </form>
     </nav>
@@ -65,7 +65,7 @@
                             <td>{{ activity.notes }}</td>
                             <td>
                                 <a href="/dashboard/trips/{{ curr_trip.id }}/itinerary/{{ activity.id }}">Edit</a>
-                                <a href="/dashboard/trips/{{ curr_trip.id }}/itinerary/{{ activity.id }}/remove">Delete</a>
+                                <a href="/dashboard/trips/{{ curr_trip.id }}/itinerary/{{ activity.id }}/remove" class="red">Delete</a>
                             </td>
                         </tr>
                         {% endfor %}
@@ -75,9 +75,9 @@
             <div class="col-4">
                 <div class="row">
                     <h5>Edit Activity #{{ curr_activity.id }}</h5>
-                    <form action="/dashboard/trips/{{ curr_trip.id }}/itinerary/{{ curr_activity_id }}/remove" method="POST">
+                    <form action="/dashboard/trips/{{ curr_trip.id }}/itinerary/{{ curr_activity.id }}/remove" method="POST">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-danger float-right delete">Delete</button>
+                        <button type="submit" class="btn btn-danger delete">Delete</button>
                     </form>
                 </div>
                 <form action="/dashboard/trips/{{ curr_trip.id }}/itinerary/{{ curr_activity_id }}/edit" method="POST">
@@ -112,11 +112,11 @@
                     <div class="form-group form-inline">
                         <div class="col-6">
                             <label for="start_time">Start Time</label>
-                            <input type="time" class="form-control" name="start_time" id="start_time" value="{{ curr_activity.start_time|time: 'H:i' }}">
+                            <input type="time" class="form-control" name="start_time" id="start_time" value="{{ curr_activity.start_time|time:'H:i' }}">
                         </div>
                         <div class="col-6">
                             <label for="end_time">End Time</label>
-                            <input type="time" class="form-control" name="end_time" id="end_time" value="{{ curr_activity.end_time|time: 'H:i' }}">
+                            <input type="time" class="form-control" name="end_time" id="end_time" value="{{ curr_activity.end_time|time:'H:i' }}">
                         </div>
                     </div>
                     <div class="form-group">
@@ -129,7 +129,7 @@
                     </div>
                     <div class="form-group">
                         <label for="notes">Notes</label>
-                        <textarea name="notes" id="notes" rows="10" class="form-control" value="{{ curr_activity.notes }}"></textarea>
+                        <textarea name="notes" id="notes" rows="10" class="form-control">{{ curr_activity.notes }}</textarea>
                     </div>
                     <button type="submit" class="btn btn-outline-primary">Add Activity</button>
                     <button type="submit" name="cancel" class="btn btn-outline-danger">Cancel</button>

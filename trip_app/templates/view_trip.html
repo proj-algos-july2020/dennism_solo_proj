@@ -27,9 +27,9 @@
                 </li>
             </ul>
         </div>
+        <p class="greet">Welcome, {{ curr_user.first_name|title }}!</p>
         <form class="form-inline my-2 my-lg-0" method="POST" action="/logout">
             {% csrf_token %}
-            <p class="greet">Welcome, {{ curr_user.first_name|title }}!</p>
             <button class="btn btn-danger my-2 my-sm-0" type="submit">Log Out</button>
         </form>
     </nav>
@@ -53,12 +53,13 @@
                 <p class="info">created at {{ curr_trip.created_at|date:'M d, Y H:i A' }}</p>
                 <p class="info">last updated at {{ curr_trip.updated_at|date:'M d, Y H:i A' }}</p>
                 {% if curr_user == curr_trip.created_by %}
-                <form action="/dashboard/trips/edit/{{ curr_trip }}" method="GET">
+                <form action="/dashboard/trips/edit/{{ curr_trip.id }}" method="GET">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-outline-primary">Edit Trip</button>
                     <button type="submit" name="cancel_trip" class="btn btn-outline-danger">Delete Trip</button>
                 </form>
                 {% endif %}
+                <hr>
                 <table class="table">
                     <thead class="thead-light">
                         <tr>
@@ -87,7 +88,7 @@
                         {% endfor %}
                     </tbody>
                 </table>
-                <form action="/dashboard/trips/{{ curr_trip.id }}/participate/" method="POST">
+                <form action="/dashboard/trips/{{ curr_trip.id }}/participate" method="POST">
                     {% csrf_token %}
                     <div class="form-group">
                         <label for="participant">Add Participant</label>
@@ -106,7 +107,7 @@
             <div class="col-6">
                 <h4 class="display-4">Itinerary</h4>
                 {% if curr_trip.trip_activities.all %}
-                <a href="">Edit >></a>
+                <a href="/dashboard/trips/{{ curr_trip.id }}/itinerary">Edit >></a>
                 <table class="table">
                     <thead class="thead-light">
                         <tr>
@@ -169,6 +170,7 @@
                     <div class="form-group">
                         <h5>Upload Photo for the Trip</h5>
                         <input type="file" class="form-control" name="photo" id="photo">
+                        <button type="submit">Upload</button>
                         <a href="">View Photo Album</a>
                     </div>
                 </form>

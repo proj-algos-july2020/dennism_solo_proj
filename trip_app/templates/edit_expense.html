@@ -27,9 +27,9 @@
                 </li>
             </ul>
         </div>
+        <p class="greet">Welcome, {{ curr_user.first_name|title }}!</p>
         <form class="form-inline my-2 my-lg-0" method="POST" action="/logout">
             {% csrf_token %}
-            <p class="greet">Welcome, {{ curr_user.first_name|title }}!</p>
             <button class="btn btn-danger my-2 my-sm-0" type="submit">Log Out</button>
         </form>
     </nav>
@@ -62,11 +62,11 @@
                             <td>{{ expense.paid_by.first_name|title }} {{ expense.paid_by.last_name|title }}</td>
                             <td>{{ expense.notes }}</td>
                             <td><a href="/dashboard/trips/{{ curr_trip.id }}/expense/{{ expense.id }}">Edit</a>
-                                <a href="/dashboard/trips/{{ curr_trip.id }}/expense/{{ expense.id }}/remove">Delete</a>
+                                <a href="/dashboard/trips/{{ curr_trip.id }}/expense/{{ expense.id }}/remove" class="red">Delete</a>
                             </td>
                         </tr>
-                        {% endif %}
                         {% endfor %}
+                        {% endif %}
                     </tbody>
                 </table>
             </div>
@@ -121,7 +121,7 @@
                         </div>
                         <div class="form-group">
                             <label for="notes">Notes</label>
-                            <textarea name="notes" id="notes" rows="10" class="form-control expense-notes" placeholder="Enter your notes here..."></textarea>
+                            <textarea name="notes" id="notes" rows="10" class="form-control expense-notes">{{ curr_expense.notes }}</textarea>
                         </div>
                         <button type="submit" class="btn btn-outline-success">Add Expense</button>
                         <button type="submit" name="cancel" class="btn btn-outline-danger">Cancel</button>

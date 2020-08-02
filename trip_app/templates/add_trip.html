@@ -17,24 +17,24 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="/dashboard/trips/new" tabindex="-1" aria-disabled="true">Start a New Trip</a>
+                    <a class="nav-link active" href="/dashboard/trips/new" tabindex="-1" aria-disabled="true">Start a New Trip</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="/dashboard/trips" tabindex="-1" aria-disabled="true">Trips</a>
+                    <a class="nav-link" href="/dashboard/trips" tabindex="-1" aria-disabled="true">Trips</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/dashboard/friends" tabindex="-1" aria-disabled="true">Friends</a>
                 </li>
             </ul>
         </div>
-        <form class="form-inline my-2 my-lg-0" method="POST" action="/logout">
+        <p class="greet">Welcome, {{ curr_user.first_name|title }}!</p>
+        <form class="form-inline form-group" method="POST" action="/logout">
             {% csrf_token %}
-            <p class="greet">Welcome, {{ curr_user.first_name|title }}!</p>
             <button class="btn btn-danger my-2 my-sm-0" type="submit">Log Out</button>
         </form>
     </nav>
     <div class="container">
-        <div class="row justify-content-center">
+        <div class="row">
             <div class="col-12">
                 <h4 class="display-4">Create a Trip</h4>
                 <form action="/dashboard/trips/new/process" method="POST">
@@ -69,11 +69,11 @@
                         <input type="text" class="form-control" name="place" id="place">
                     </div>
                     <div class="form-group form-inline">
-                        <div class="col-6">
+                        <div class="col-3">
                             <label for="start_date">Start Date</label>
                             <input type="date" class="form-control" name="start_date" id="start_date">
                         </div>
-                        <div class="col-6">
+                        <div class="col-3">
                             <label for="end_date">End Date</label>
                             <input type="date" class="form-control" name="end_date" id="end_date">
                         </div>
